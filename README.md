@@ -33,3 +33,10 @@ nginx is configured to listen in the ports HTTP/8080 and HTTPS/8443.
 * `BACKEND_URL` (mandatory): URL where requests under `/api` will be forwarded.
 * `FRONTEND_URL` (mandatory): URL where requests not matching the previous route will be forwarded.
 * `DNS_RESOLVER` (optional): nginx requires a DNS server to resolve the forwarded servers; if this value is not set, it will be guessed automatically from `/etc/resolv.conf`.
+
+## Repositories
+
+This image is available in the following repositories:
+
+* [Docker Hub](https://hub.docker.com/repository/docker/okelet/front-back-gateway)
+* [AWS Public ECR](https://gallery.ecr.aws/d0l4b0i5/front-back-gateway)
