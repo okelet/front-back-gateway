@@ -40,3 +40,4 @@ This image is available in the following repositories:
 
 * [Docker Hub](https://hub.docker.com/repository/docker/okelet/front-back-gateway)
 * [AWS Public ECR](https://gallery.ecr.aws/d0l4b0i5/front-back-gateway)
+* [GitHub Packages](https://github.com/okelet/front-back-gateway/pkgs/container/front-back-gateway)
