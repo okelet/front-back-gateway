@@ -1,6 +1,6 @@
 # Frontend/Backend gateway
 
-![https://img.shields.io/docker/pulls/okelet/front-back-gateway.svg](https://hub.docker.com/repository/docker/okelet/front-back-gateway)
+[![DockerHub pulls](https://img.shields.io/docker/pulls/okelet/front-back-gateway.svg)](https://hub.docker.com/repository/docker/okelet/front-back-gateway)
 
 This Docker image is based on the [nginx](https://hub.docker.com/_/nginx) image, and configures automatically a gateway, that forwards requests to two backends, simulating the frontend/backend pattern. This image was created to simulate the behaviour of the Spring Boot Cloud Gateway image, for doing the initial infrastructure deployment, before the real software is deployed. I usually use the [mendhak/http-https-echo](https://hub.docker.com/r/mendhak/http-https-echo) image as the backend.
 

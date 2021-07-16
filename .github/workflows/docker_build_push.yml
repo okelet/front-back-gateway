@@ -57,9 +57,10 @@ jobs:
             okelet/front-back-gateway:latest
 #             ghcr.io/okelet/front-back-gateway:${{ steps.get_version.outputs.VERSION }}
 
-      - uses: ms-jpq/sync-dockerhub-readme@v1
+      - name: Docker Hub Description/README
+        uses: peter-evans/dockerhub-description@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           repository: ${{ secrets.DOCKERHUB_USERNAME }}/front-back-gateway
-          readme: "./README.md"
+          short-description: ${{ github.event.repository.description }}
