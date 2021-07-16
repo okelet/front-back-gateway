@@ -1,0 +1,84 @@
+
+###############################################################################################
+# https://gist.github.com/seabbs/721d95b6950461da8624378193305665
+###############################################################################################
+
+# If we receive X-Forwarded-Proto, pass it through; otherwise, pass along the
+# scheme used to connect to this server
+map $http_x_forwarded_proto $proxy_x_forwarded_proto {
+  default $http_x_forwarded_proto;
+  ''      $scheme;
+}
+
+# If we receive X-Forwarded-Port, pass it through; otherwise, pass along the
+# server port the client connected to
+map $http_x_forwarded_port $proxy_x_forwarded_port {
+  default $http_x_forwarded_port;
+  ''      $server_port;
+}
+
+# If we receive Upgrade, set Connection to "upgrade"; otherwise, delete any
+# Connection header that may have been passed to this server
+map $http_upgrade $proxy_connection {
+  default upgrade;
+  '' close;
+}
+
+# Set appropriate X-Forwarded-Ssl header
+map $scheme $proxy_x_forwarded_ssl {
+  default off;
+  https on;
+}
+
+proxy_http_version 1.1;
+proxy_buffering off;
+proxy_set_header Host $http_host;
+proxy_set_header Upgrade $http_upgrade;
+proxy_set_header Connection $proxy_connection;
+proxy_set_header X-Real-IP $remote_addr;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+proxy_set_header X-Forwarded-Proto $proxy_x_forwarded_proto;
+proxy_set_header X-Forwarded-Ssl $proxy_x_forwarded_ssl;
+proxy_set_header X-Forwarded-Port $proxy_x_forwarded_port;
+proxy_set_header Proxy "";
+
+###############################################################################################
+
+server {
+
+  # Minimal
+  listen 8080;
+
+  # SSL, self-signed
+  listen 8443 ssl;
+  ssl_certificate /etc/nginx/certs/selfsigned.crt;
+  ssl_certificate_key /etc/nginx/certs/selfsigned.key;
+
+  # Healthcheck
+  location = /healthcheck {
+    access_log off;
+    default_type text/plain;
+    return 200 "healthy\n";
+  }
+
+  # Backend
+  location = /api {
+    # Fix auto-generated Location's that don't respect forwarded values
+    return 301 $proxy_x_forwarded_proto://$http_host/api/;
+  }
+  location /api/ {
+    proxy_set_header X-Upstream-Id backend;
+    resolver ${DNS_RESOLVER} valid=5s;
+    set $upstream ${BACKEND_URL}$request_uri;
+    proxy_pass $upstream;
+  }
+
+  # Frontend
+  location / {
+    proxy_set_header X-Upstream-Id frontend;
+    resolver ${DNS_RESOLVER} valid=5s;
+    set $upstream ${FRONTEND_URL}$request_uri;
+    proxy_pass $upstream;
+  }
+
+}
