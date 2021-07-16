@@ -1,0 +1,21 @@
+version: "3.9"
+services:
+  frontend:
+    image: containous/whoami:latest
+    environment:
+      WHOAMI_NAME: frontend
+  backend:
+    image: containous/whoami:latest
+    environment:
+      WHOAMI_NAME: backend
+  gateway:
+    build: .
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+    links:
+      - frontend
+      - backend
+    environment:
+      BACKEND_URL: http://backend
+      FRONTEND_URL: http://frontend
