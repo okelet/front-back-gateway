@@ -2,8 +2,8 @@ name: docker-build-push
 
 on:
   push:
-    tags:
-      - '*'
+    branches:
+      - 'master'
 
 jobs:
   docker:
@@ -12,9 +12,9 @@ jobs:
 
       - uses: actions/checkout@v2
 
-      - name: Get the version
-        id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+      - name: 'Get Previous tag'
+        id: previoustag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -53,5 +53,13 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            okelet/front-back-gateway:${{ steps.get_version.outputs.VERSION }}
+            okelet/front-back-gateway:${{ steps.previoustag.outputs.tag }}
+            okelet/front-back-gateway:latest
 #             ghcr.io/okelet/front-back-gateway:${{ steps.get_version.outputs.VERSION }}
+
+      - uses: ms-jpq/sync-dockerhub-readme@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: ${{ secrets.DOCKERHUB_USERNAME }}/front-back-gateway
+          readme: "./README.md"
