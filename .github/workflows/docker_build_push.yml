@@ -37,12 +37,9 @@ jobs:
         env:
           AWS_REGION: us-east-1
 
-#       - name: Login to GitHub Container Registry
-#         uses: docker/login-action@v1
-#         with:
-#           registry: ghcr.io
-#           username: ${{ github.repository_owner }}
-#           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Log in to registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
 
       - name: Build and push
         uses: docker/build-push-action@v2
@@ -55,7 +52,8 @@ jobs:
             okelet/front-back-gateway:latest
             public.ecr.aws/d0l4b0i5/front-back-gateway:${{ steps.get-latest-tag.outputs.tag }}
             public.ecr.aws/d0l4b0i5/front-back-gateway:latest
-#             ghcr.io/okelet/front-back-gateway:${{ steps.get_version.outputs.VERSION }}
+            ghcr.io/${{ github.repository_owner }}/front-back-gateway:${{ steps.get-latest-tag.outputs.tag }}
+            ghcr.io/${{ github.repository_owner }}/front-back-gateway:latest
 
       - name: Docker Hub Description/README
         uses: peter-evans/dockerhub-description@v2
