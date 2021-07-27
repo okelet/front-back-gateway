@@ -74,4 +74,4 @@ jobs:
         run: |
           aws ecr-public put-repository-catalog-data \
             --repository-name front-back-gateway \
-            --catalog-data "$(jq -n --arg desc ${{ github.event.repository.description }} --rawfile readme README.md '{"description": $desc, "aboutText": $readme, "usageText": $readme, "architectures": ["ARM 64", "x86-64"], "operatingSystems": ["Linux"]}')"
+            --catalog-data "$(jq -n --arg desc "${{ github.event.repository.description }}" --rawfile readme README.md '{"description": $desc, "aboutText": $readme, "usageText": $readme, "architectures": ["ARM 64", "x86-64"], "operatingSystems": ["Linux"]}')"
