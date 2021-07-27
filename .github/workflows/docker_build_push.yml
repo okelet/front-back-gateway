@@ -53,8 +53,8 @@ jobs:
           tags: |
             okelet/front-back-gateway:${{ steps.get-latest-tag.outputs.tag }}
             okelet/front-back-gateway:latest
-            public.ecr.aws/d0l4b0i5/front-back-gateway:${{ steps.get-latest-tag.outputs.tag }}
-            public.ecr.aws/d0l4b0i5/front-back-gateway:latest
+            public.ecr.aws/okelet/front-back-gateway:${{ steps.get-latest-tag.outputs.tag }}
+            public.ecr.aws/okelet/front-back-gateway:latest
             ghcr.io/${{ github.repository_owner }}/front-back-gateway:${{ steps.get-latest-tag.outputs.tag }}
             ghcr.io/${{ github.repository_owner }}/front-back-gateway:latest
 
