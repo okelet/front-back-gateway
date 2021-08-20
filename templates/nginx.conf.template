@@ -62,11 +62,11 @@ server {
   }
 
   # Backend
-  location = /api {
+  location = ${BACKEND_PATH}i {
     # Fix auto-generated Location's that don't respect forwarded values
-    return 301 $proxy_x_forwarded_proto://$http_host/api/;
+    return 301 $proxy_x_forwarded_proto://$http_host${BACKEND_PATH}/;
   }
-  location /api/ {
+  location ${BACKEND_PATH}/ {
     proxy_set_header X-Upstream-Id backend;
     resolver ${DNS_RESOLVER} valid=5s;
     set $upstream ${BACKEND_URL}$request_uri;
