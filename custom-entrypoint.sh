@@ -24,4 +24,8 @@ if [ -z "${BACKEND_URL}" ]; then
     exit 1
 fi
 
+if [ -z "${BACKEND_PATH}" ]; then
+    export BACKEND_PATH="/api"
+fi
+
 exec /docker-entrypoint.sh "$@"
